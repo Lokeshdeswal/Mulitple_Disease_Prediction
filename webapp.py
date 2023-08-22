@@ -19,8 +19,8 @@ def load_lottieurl(url: str):
     if r.status_code != 200:
         return None
     return r.json()
-#Load saved models
 
+#Load saved models
 diabetes_model = pickle.load(open('diabetes_prediction_model.sav','rb'))
 
 heart_model = pickle.load(open('heart_xgb_model.sav','rb'))
@@ -124,162 +124,6 @@ with st.sidebar:
                             'Brain Stroke Prediction'],
                            icons=['activity','heart','person'], #edit the icons
                            default_index=0)
-        
-
-######### Diabetes Prediction Page
-if (selected=='Diabetes Prediction'):
-    #Page title
-    
-    st.title("Diabetes Prediction app")
-    
-    #arranging user input in 3 columns
-    col1,col2,col3,col4 = st.columns(4)
-    
-    with col1:
-        
-        
-        
-        Age = st.selectbox('Age(Years)?',['18-24','24-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80 or older'])
-        Sex = st.selectbox('Sex?',['Female','Male']) #Female,Male
-        Smoking = st.selectbox('Smoking?',['No','Yes']) #No,Yes
-        AlcoholDrinking = st.selectbox('Alcohol Consumption?',['No','Yes']) #No,Yes
-        
-        HeartDiseaseorAttack = st.selectbox('Suffering from heart disease or Heart Attact?',['No','Yes'])
-        
-    with col2:
-        GenHlth = st.selectbox('General Health?',['Excellent', 'Very good', 'Good', 'Fair','Poor'])
-        PhysicalActivity = st.selectbox('Physical Activity?',['No','Yes']) #No,Yes
-        DiffWalking = st.selectbox('Difficulty in Walking?',['No','Yes']) #No,Yes
-        HighBP = st.selectbox('High Blood Pressure?',['No','Yes'])
-        
-        NoDocbcCost = st.selectbox('Inaccessible healthcare due to cost recently?',['Yes','No'])        
-        
-    with col3:
-        Income = st.selectbox('Income?',['Less Than $10k','$10k-$15k','$15k-$20k','$20k-$25k','$25k-$30k','$30k-$35k','$35k-$40k','Above $40k'])
-        AnyHealthcare = st.selectbox('Health Insurance?',['Yes','No'])
-        HighChol = st.selectbox('High Cholesterol?',['No','Yes'])
-        Education = st.selectbox('Education level?',['Never Attended','Elementry','Secondory','Higher Secondory','Graduate','Post Graduate'])
-        CholCheck = st.selectbox('Cholesterol check in 5 years?',['No','Yes']) 
-    with col4:
-        Stroke = st.selectbox('Stroke?',['No','Yes']) #No,Yes
-        Fruits = st.selectbox('Consume Fruits daily?',['No','Yes'])
-        Veggies = st.selectbox('Consume Vegetables daily?',['No','Yes'])
-        
-        
-        
-    MentalHealth = st.slider('For how many days in the past 30 days was your Mental Health not good?', \
-                                 min_value=0.0,max_value=30.0,value=7.0,step=1.0)
-    PhysicalHealth = st.slider('Physical illness and injury for how many days during past 30 days?', \
-                               min_value=0.0,max_value=30.0,value=7.0,step=1.0)    
-    BMI = st.slider('BMI (Body-Mass Index)', \
-                               min_value=10.0,max_value=45.0,value=24.0,step=0.1)
-        
-        
-        
-    #Mapping the user input to feature codes of model
-    gen_hlth_mapping = {'Excellent': 1, 'Very good': 2, 'Good': 3, 'Fair': 4}
-    dum_GenHlth = gen_hlth_mapping.get(GenHlth, 5)
-    age_mapping = {'18-24': 1,'24-29': 2,'30-34': 3,'35-39': 4,'40-44': 5,'45-49': 6,'50-54': 7,'55-59': 8,'60-64': 9,'65-69': 10,'70-74': 11,'75-79': 12}
-    dum_Age = age_mapping.get(Age, 13)
-    education_mapping = {'Never Attended': 1,'Elementary': 2,'Secondary': 3,'Higher Secondary': 4,'Graduate': 5}
-    dum_Education = education_mapping.get(Education,6)  
-    income_mapping = {'Less Than $10k': 1,'$10k-$15k': 2,'$15k-$20k': 3,'$20k-$25k': 4,'$25k-$30k': 5,'$30k-$35k': 6,'$35k-$40k': 7}    
-    dum_Income = income_mapping.get(Income,8)      
-    
-    #Encoding the dummy features
-    if Smoking == 'No':
-        dum_Smoking=[1,0]
-    else:
-        dum_Smoking=[0,1]
-    
-    if AlcoholDrinking == 'No':
-        dum_AlcoholDrinking=[1,0]
-    else:
-        dum_AlcoholDrinking=[0,1]
-
-    if Stroke == 'No':
-        dum_Stroke=[1,0]
-    else:
-        dum_Stroke=[0,1]
-    
-    if DiffWalking == 'No':
-        dum_DiffWalking=[1,0]
-    else:
-        dum_DiffWalking=[0,1]
-    
-    if Sex == 'Female':
-        dum_Sex=[1,0]
-    else:
-        dum_Sex=[0,1]
-   
-    if HighBP == 'No':
-        dum_HighBP=[1,0]
-    else:
-        dum_HighBP=[0,1]
-    
-    if HighChol == 'No':
-        dum_HighChol=[1,0]
-    else:
-        dum_HighChol=[0,1]
-
-    if CholCheck == 'No':
-        dum_CholCheck=[1,0]
-    else:
-        dum_CholCheck=[0,1]
-    
-    if HeartDiseaseorAttack == 'No':
-        dum_HeartDiseaseorAttack=[1,0]
-    else:
-        dum_HeartDiseaseorAttack=[0,1]
-    
-    if PhysicalActivity == 'No':
-        dum_PhysicalActivity=[1,0]
-    else:
-        dum_PhysicalActivity=[0,1]  
-    
-    if Fruits == 'No':
-        dum_Fruits=[1,0]
-    else:
-        dum_Fruits=[0,1]
-    
-    if Veggies == 'No':
-        dum_Veggies=[1,0]
-    else:
-        dum_Veggies=[0,1]
-
-    if AnyHealthcare == 'No':
-        dum_AnyHealthcare=[1,0]
-    else:
-        dum_AnyHealthcare=[0,1]
-    
-    if NoDocbcCost == 'No':
-        dum_NoDocbcCost=[1,0]
-    else:
-        dum_NoDocbcCost=[0,1]
-    
-    
-    # code for Prediction
-    diagnosis = ''
-    
-    #Defining list of features
-    features = []
-    ordinal_features = [BMI,dum_GenHlth,MentalHealth,PhysicalHealth,dum_Age,
-                        dum_Education,dum_Income]
-    dum_features = [dum_HighBP,dum_HighChol,dum_CholCheck,dum_Smoking,dum_Stroke,
-                    dum_HeartDiseaseorAttack,dum_PhysicalActivity,dum_Fruits,dum_Veggies,
-                    dum_AlcoholDrinking , dum_AnyHealthcare,dum_NoDocbcCost,dum_DiffWalking,dum_Sex ]
-    
-    for var in ordinal_features:
-        features.append(var)
-    
-    for var in dum_features:
-        features.extend(var)
-    
-    # creating a button for Prediction
-    if st.button('Diabetes Test Result'):
-        diagnosis = diabatic_disease_prediction(features)
-        
-    st.success(diagnosis)
     
 ######### Heart Disease Prediction Page
 if (selected=='Heart Disease Prediction'):
@@ -428,6 +272,154 @@ if (selected=='Heart Disease Prediction'):
     # creating a button for Prediction
     if st.button('Heart Disease Test Result'):
         diagnosis = heart_disease_prediction(features)
+    st.success(diagnosis)
+
+######### Diabetes Prediction Page
+if (selected=='Diabetes Prediction'):
+    #Page title
+    
+    st.title("Diabetes Prediction app")
+    
+    #arranging user input in 4 columns
+    col1,col2,col3,col4 = st.columns(4)
+    
+    with col1:      
+        Age = st.selectbox('Age(Years)?',['18-24','24-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80 or older'])
+        Sex = st.selectbox('Sex?',['Female','Male']) #Female,Male
+        Smoking = st.selectbox('Smoking?',['No','Yes']) #No,Yes
+        AlcoholDrinking = st.selectbox('Alcohol Consumption?',['No','Yes']) #No,Yes
+        HeartDiseaseorAttack = st.selectbox('Suffering from heart disease or Heart Attact?',['No','Yes'])
+        
+    with col2:
+        GenHlth = st.selectbox('General Health?',['Excellent', 'Very good', 'Good', 'Fair','Poor'])
+        PhysicalActivity = st.selectbox('Physical Activity?',['No','Yes']) #No,Yes
+        DiffWalking = st.selectbox('Difficulty in Walking?',['No','Yes']) #No,Yes
+        HighBP = st.selectbox('High Blood Pressure?',['No','Yes'])
+        NoDocbcCost = st.selectbox('Inaccessible healthcare due to cost recently?',['Yes','No'])        
+        
+    with col3:
+        Income = st.selectbox('Income?',['Less Than $10k','$10k-$15k','$15k-$20k','$20k-$25k','$25k-$30k','$30k-$35k','$35k-$40k','Above $40k'])
+        AnyHealthcare = st.selectbox('Health Insurance?',['Yes','No'])
+        HighChol = st.selectbox('High Cholesterol?',['No','Yes'])
+        Education = st.selectbox('Education level?',['Never Attended','Elementry','Secondory','Higher Secondory','Graduate','Post Graduate'])
+        CholCheck = st.selectbox('Cholesterol check in 5 years?',['No','Yes']) 
+    with col4:
+        Stroke = st.selectbox('Stroke?',['No','Yes']) #No,Yes
+        Fruits = st.selectbox('Consume Fruits daily?',['No','Yes'])
+        Veggies = st.selectbox('Consume Vegetables daily?',['No','Yes'])
+        
+        
+        
+    MentalHealth = st.slider('For how many days in the past 30 days was your Mental Health not good?', \
+                                 min_value=0.0,max_value=30.0,value=7.0,step=1.0)
+    PhysicalHealth = st.slider('Physical illness and injury for how many days during past 30 days?', \
+                               min_value=0.0,max_value=30.0,value=7.0,step=1.0)    
+    BMI = st.slider('BMI (Body-Mass Index)', \
+                               min_value=10.0,max_value=45.0,value=24.0,step=0.1)
+        
+    #Mapping the user input to feature codes of model
+    gen_hlth_mapping = {'Excellent': 1, 'Very good': 2, 'Good': 3, 'Fair': 4}
+    dum_GenHlth = gen_hlth_mapping.get(GenHlth, 5)
+    age_mapping = {'18-24': 1,'24-29': 2,'30-34': 3,'35-39': 4,'40-44': 5,'45-49': 6,'50-54': 7,'55-59': 8,'60-64': 9,'65-69': 10,'70-74': 11,'75-79': 12}
+    dum_Age = age_mapping.get(Age, 13)
+    education_mapping = {'Never Attended': 1,'Elementary': 2,'Secondary': 3,'Higher Secondary': 4,'Graduate': 5}
+    dum_Education = education_mapping.get(Education,6)  
+    income_mapping = {'Less Than $10k': 1,'$10k-$15k': 2,'$15k-$20k': 3,'$20k-$25k': 4,'$25k-$30k': 5,'$30k-$35k': 6,'$35k-$40k': 7}    
+    dum_Income = income_mapping.get(Income,8)      
+    
+    #Encoding the dummy features
+    if Smoking == 'No':
+        dum_Smoking=[1,0]
+    else:
+        dum_Smoking=[0,1]
+    
+    if AlcoholDrinking == 'No':
+        dum_AlcoholDrinking=[1,0]
+    else:
+        dum_AlcoholDrinking=[0,1]
+
+    if Stroke == 'No':
+        dum_Stroke=[1,0]
+    else:
+        dum_Stroke=[0,1]
+    
+    if DiffWalking == 'No':
+        dum_DiffWalking=[1,0]
+    else:
+        dum_DiffWalking=[0,1]
+    
+    if Sex == 'Female':
+        dum_Sex=[1,0]
+    else:
+        dum_Sex=[0,1]
+   
+    if HighBP == 'No':
+        dum_HighBP=[1,0]
+    else:
+        dum_HighBP=[0,1]
+    
+    if HighChol == 'No':
+        dum_HighChol=[1,0]
+    else:
+        dum_HighChol=[0,1]
+
+    if CholCheck == 'No':
+        dum_CholCheck=[1,0]
+    else:
+        dum_CholCheck=[0,1]
+    
+    if HeartDiseaseorAttack == 'No':
+        dum_HeartDiseaseorAttack=[1,0]
+    else:
+        dum_HeartDiseaseorAttack=[0,1]
+    
+    if PhysicalActivity == 'No':
+        dum_PhysicalActivity=[1,0]
+    else:
+        dum_PhysicalActivity=[0,1]  
+    
+    if Fruits == 'No':
+        dum_Fruits=[1,0]
+    else:
+        dum_Fruits=[0,1]
+    
+    if Veggies == 'No':
+        dum_Veggies=[1,0]
+    else:
+        dum_Veggies=[0,1]
+
+    if AnyHealthcare == 'No':
+        dum_AnyHealthcare=[1,0]
+    else:
+        dum_AnyHealthcare=[0,1]
+    
+    if NoDocbcCost == 'No':
+        dum_NoDocbcCost=[1,0]
+    else:
+        dum_NoDocbcCost=[0,1]
+    
+    
+    # code for Prediction
+    diagnosis = ''
+    
+    #Defining list of features
+    features = []
+    ordinal_features = [BMI,dum_GenHlth,MentalHealth,PhysicalHealth,dum_Age,
+                        dum_Education,dum_Income]
+    dum_features = [dum_HighBP,dum_HighChol,dum_CholCheck,dum_Smoking,dum_Stroke,
+                    dum_HeartDiseaseorAttack,dum_PhysicalActivity,dum_Fruits,dum_Veggies,
+                    dum_AlcoholDrinking , dum_AnyHealthcare,dum_NoDocbcCost,dum_DiffWalking,dum_Sex ]
+    
+    for var in ordinal_features:
+        features.append(var)
+    
+    for var in dum_features:
+        features.extend(var)
+    
+    # creating a button for Prediction
+    if st.button('Diabetes Test Result'):
+        diagnosis = diabatic_disease_prediction(features)
+        
     st.success(diagnosis)
     
 ####### Brain Stroke Web page
