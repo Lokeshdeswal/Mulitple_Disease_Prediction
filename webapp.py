@@ -122,7 +122,7 @@ with st.sidebar:
                            ['Heart Disease Prediction',
                             'Diabetes Prediction',
                             'Brain Stroke Prediction'],
-                           icons=['activity','heart','person'], #edit the icons
+                           icons=['heart','activity','person'], #edit the icons
                            default_index=0)
     
 ######### Heart Disease Prediction Page
