@@ -21,11 +21,11 @@ def load_lottieurl(url: str):
     return r.json()
 #Load saved models
 
-diabetes_model = pickle.load(open(r'C:/Users/Lokesh/Desktop/DBDA/diabetes_prediction_model.sav','rb'))
+diabetes_model = pickle.load(open('diabetes_prediction_model.sav','rb'))
 
-heart_model = pickle.load(open(r'C:/Users/Lokesh/Desktop/DBDA/heart_xgb_model.sav','rb'))
+heart_model = pickle.load(open('heart_xgb_model.sav','rb'))
 
-brain_model = pickle.load(open(r'C:/Users/Lokesh/Desktop/DBDA/brain_stroke_prediction_model.sav','rb'))
+brain_model = pickle.load(open('brain_stroke_prediction_model.sav','rb'))
 
 #Diabetes prediction function
 def diabatic_disease_prediction(input_data):
