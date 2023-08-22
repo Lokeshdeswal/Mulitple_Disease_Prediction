@@ -119,8 +119,8 @@ def brain_stroke_prediction(input_data):
 with st.sidebar:
     
     selected = option_menu('Multiple Disease Prediction Web Application', \
-                           ['Diabetes Prediction',
-                            'Heart Disease Prediction',
+                           ['Heart Disease Prediction',
+                            'Diabetes Prediction',
                             'Brain Stroke Prediction'],
                            icons=['activity','heart','person'], #edit the icons
                            default_index=0)
