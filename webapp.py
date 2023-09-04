@@ -21,11 +21,11 @@ def load_lottieurl(url: str):
     return r.json()
 
 #Load saved models
-diabetes_model = pickle.load(open('diabetes_prediction_model.sav','rb'))
+diabetes_model = pickle.load(open(r'C:\Users\user\Desktop\Project\diabetes_prediction_model.sav','rb'))
 
-heart_model = pickle.load(open('heart_xgb_model.sav','rb'))
+heart_model = pickle.load(open(r'C:\Users\user\Desktop\Project\heart_xgb_model.sav','rb'))
 
-brain_model = pickle.load(open('brain_stroke_prediction_model.sav','rb'))
+brain_model = pickle.load(open(r'C:\Users\user\Desktop\Project\brain_stroke_prediction_model.sav','rb'))
 
 #Diabetes prediction function
 def diabatic_disease_prediction(input_data):
@@ -34,7 +34,9 @@ def diabatic_disease_prediction(input_data):
     
     #reshape the array as we are predicting for one instance
     input_data_reshaped = input_data_as_numpy_array.reshape(1,-1)
-    
+    prob = diabetes_model.predict_proba(input_data_reshaped)[0][1] * 100
+
+   # prob1 = diabetes_model.predict_proba(input_data_reshaped)[1]*100
     prediction = diabetes_model.predict(input_data_reshaped)
     print(prediction)
     lottie_hello = load_lottieurl("https://lottie.host/fb20f849-768c-4f10-a993-60400c375153/Sy31l0f7Gx.json")
@@ -51,9 +53,10 @@ def diabatic_disease_prediction(input_data):
         key=None,
     )
     if (prediction[0]==1):
-        return 'The person is Diabatic'
+        return f'The person may be diabetic with a {prob:.2f}% chance.'
     else:
-        return 'The person is not Diabaties'
+     
+        return f'While it is not certain that the person is diabetic, there is a {prob:.2f}% chance.'
 
 #Heart Disease prediction function    
 def heart_disease_prediction(input_data):
@@ -63,7 +66,7 @@ def heart_disease_prediction(input_data):
     
     #reshape the array as we are predicting for one instance
     input_data_reshaped = input_data_as_numpy_array.reshape(1,-1)
-    
+    prob = heart_model.predict_proba(input_data_reshaped)[0][1] * 100
     prediction = heart_model.predict(input_data_reshaped)
     #print(prediction)
     lottie_hello = load_lottieurl("https://lottie.host/45ef8e00-16c9-4477-a48f-d11a97983fdf/m9zuQ0m9oF.json")
@@ -80,9 +83,9 @@ def heart_disease_prediction(input_data):
         key=None,
     )
     if (prediction[0]==1):
-        return 'The person has heart disease'
+        return f'The person might be suffering from heart disease with {prob:.2f} %'
     else:
-        return 'The person does not have heart disease'
+        return f'The person may not have heart disease, but there might be a {prob:.2f}% chance.'
 
 #Brain Stroke prediction function
 def brain_stroke_prediction(input_data):
@@ -92,7 +95,8 @@ def brain_stroke_prediction(input_data):
     
     #reshape the array as we are predicting for one instance
     input_data_reshaped = input_data_as_numpy_array.reshape(1,-1)
-    
+    prob = brain_model.predict_proba(input_data_reshaped)[0][1] * 100
+
     prediction = brain_model.predict(input_data_reshaped)
     #print(prediction)
     lottie_hello = load_lottieurl("https://lottie.host/59d4a5e4-781f-4a7f-bb76-c3b3f3954835/eQN2RATnhn.json")
@@ -109,9 +113,9 @@ def brain_stroke_prediction(input_data):
         key=None,
     )
     if (prediction[0]==1):
-        return 'The person has brain stroke'
+        return f'The person may have a {prob:.2f}% chance of having a brain stroke.'
     else:
-        return 'The person does not have brain stroke'
+        return f'The individual may not be at risk of a stroke, but there could still be a {prob:.2f}% chance.'
 
 #sidebar for navigation
 
